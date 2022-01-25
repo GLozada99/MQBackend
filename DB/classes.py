@@ -2,7 +2,10 @@ import sqlalchemy
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from sql_session import remote_sql_session
+from sshtunnel import SSHTunnelForwarder
+from decouple import config
+from DB.sql_session import get_engine_for_port
+
 
 Base = declarative_base()
 
@@ -11,7 +14,7 @@ class User(Base):
     __tablename__ = 'users'
 
     id_ = Column('id', sqlalchemy.Integer, primary_key=True)
-    user_name = Column(
+    username = Column(
         sqlalchemy.String(length=30))
     password = Column(
         sqlalchemy.String(length=64))
@@ -93,10 +96,22 @@ class Invoice(Base):
     quote = relationship('Quote', back_populates='invoices')
 
 
-@remote_sql_session
-def main(session, engine):
-    Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
+def main(remote=True):
+    if remote:
+        with SSHTunnelForwarder(
+                (config('DB_SSH_IP'), config('DB_SSH_PORT', cast=int)),
+                ssh_username=config('DB_SSH_USERNAME'),
+                ssh_pkey=config('DB_SSH_KEY_PATH'),
+                remote_bind_address=(config('DB_HOST'), config('DB_PORT', cast=int))
+        ) as tunnel:
+            tunnel.start()
+            engine = get_engine_for_port(tunnel.local_bind_port)
+            Base.metadata.drop_all(engine)
+            Base.metadata.create_all(engine)
+    else:
+        engine = get_engine_for_port(config('DB_PORT', cast=int))
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
 
 
 if __name__ == "__main__":
