@@ -9,6 +9,7 @@ sqlalchemy-serializer = "*"
 python-decouple = "*"
 sshtunnel = "*"
 psycopg2 = "*"
+mqbackend = {editable = true, path = "."}
 
 [dev-packages]
 flake8 = "*"
