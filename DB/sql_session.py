@@ -17,7 +17,6 @@ def get_engine_for_port(port):
 
 def with_sql_session(function, args, kwargs, engine=None):
     if engine is None:
-        # Default to local port
         engine = get_engine_for_port(config('DB_PORT', cast=int))
     Session = sessionmaker(bind=engine)
     session = Session()

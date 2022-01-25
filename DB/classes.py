@@ -63,7 +63,7 @@ class Quote(Base):
     closed_date = Column(sqlalchemy.Date)
     total_cost = Column(sqlalchemy.Numeric)
 
-    client = relationship('Client', back_populates='quote')
+    client = relationship('Client', back_populates='quotes')
     articles = relationship('QuoteArticle', back_populates='quote')
     invoices = relationship('Invoice', back_populates='quote')
 
