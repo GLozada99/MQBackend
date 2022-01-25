@@ -21,7 +21,7 @@ def with_sql_session(function, args, kwargs, engine=None):
     Session = sessionmaker(bind=engine)
     session = Session()
     try:
-        return function(session, engine, *args, **kwargs)
+        return function(session, *args, **kwargs)
     finally:
         session.close()
 

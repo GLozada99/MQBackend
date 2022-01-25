@@ -94,7 +94,8 @@ class Invoice(Base):
 
 
 @remote_sql_session
-def main(session, engine):
+def main(session):
+    engine = session.get_bind()
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
