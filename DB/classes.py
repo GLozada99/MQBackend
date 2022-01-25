@@ -15,6 +15,7 @@ class User(Base):
         sqlalchemy.String(length=30))
     password = Column(
         sqlalchemy.String(length=64))
+    active = Column(sqlalchemy.Boolean, default=True)
 
 
 class Article(Base):
@@ -26,6 +27,7 @@ class Article(Base):
     description = Column(sqlalchemy.String(length=60))
     current_price = Column(sqlalchemy.Numeric)
     availability = Column(sqlalchemy.Integer)
+    active = Column(sqlalchemy.Boolean, default=True)
 
     quotes = relationship('QuoteArticle', back_populates='article')
 
@@ -46,6 +48,7 @@ class Client(Base):
         sqlalchemy.String(length=30))
     address = Column(
         sqlalchemy.String(length=60))
+    active = Column(sqlalchemy.Boolean, default=True)
 
     quotes = relationship('Quote', back_populates='client')
 
