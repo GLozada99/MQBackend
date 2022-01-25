@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "205ae9a81a3b28188f7318bc4a4aeffc1bd9b252ca6f8cf7f40010eddfd2f337"
+            "sha256": "f313bfb37e741863e14dd0d9b3ef5d3f91b560b4e49235c93559dda37c6c818b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -173,6 +173,10 @@
             ],
             "markers": "python_version >= '3' and platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
             "version": "==1.1.2"
+        },
+        "mqbackend": {
+            "editable": true,
+            "path": "."
         },
         "paramiko": {
             "hashes": [
