@@ -3,6 +3,8 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from DB.sql_session import remote_sql_session
+from Functions.crud import create
+from Functions.functions import compute_hash
 
 
 Base = declarative_base()
@@ -99,6 +101,7 @@ def main(session):
     engine = session.get_bind()
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
+    create(User(username='admin', password=compute_hash('admin')))
 
 
 if __name__ == "__main__":
