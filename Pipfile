@@ -10,6 +10,14 @@ python-decouple = "*"
 sshtunnel = "*"
 psycopg2 = "*"
 mqbackend = {editable = true, path = "."}
+http-status = "*"
+flask = "*"
+uwsgi = "*"
+flask-cors = "*"
+flask-jwt-extended = "*"
+flatten-json = "*"
+icecream = "*"
+gevent = "*"
 
 [dev-packages]
 flake8 = "*"
