@@ -44,15 +44,18 @@ def with_remote_sql_session(function, *args, **kwargs):
 
 
 # Decorators
-def local_sql_session(function):
-    @wraps(function)
-    def wrapper(*args, **kwargs):
-        return with_local_sql_session(function, *args, **kwargs)
-    return wrapper
-
-
-def remote_sql_session(function):
-    @wraps(function)
-    def wrapper(*args, **kwargs):
-        return with_remote_sql_session(function, *args, **kwargs)
-    return wrapper
+def sql_session(remote=False):
+    if remote:
+        def remote_sql_session(function):
+            @wraps(function)
+            def wrapper(*args, **kwargs):
+                return with_remote_sql_session(function, *args, **kwargs)
+            return wrapper
+        return remote_sql_session
+    else:
+        def local_sql_session(function):
+            @wraps(function)
+            def wrapper(*args, **kwargs):
+                return with_local_sql_session(function, *args, **kwargs)
+            return wrapper
+        return local_sql_session
