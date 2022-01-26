@@ -13,7 +13,7 @@ class User(Base):
 
     id_ = Column('id', sqlalchemy.Integer, primary_key=True)
     username = Column(
-        sqlalchemy.String(length=30))
+        sqlalchemy.String(length=30), unique=True)
     password = Column(
         sqlalchemy.String(length=64))
     active = Column(sqlalchemy.Boolean, default=True)
