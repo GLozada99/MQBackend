@@ -6,12 +6,13 @@ from DB.sql_session import sql_session
 from decouple import config
 import Functions.crud as crud
 from Functions.functions import compute_hash
+from sqlalchemy_serializer import SerializerMixin
 
 
 Base = declarative_base()
 
 
-class User(Base):
+class User(Base, SerializerMixin):
     __tablename__ = 'users'
 
     id_ = Column('id', sqlalchemy.Integer, primary_key=True)
@@ -21,8 +22,10 @@ class User(Base):
         sqlalchemy.String(length=64))
     active = Column(sqlalchemy.Boolean, default=True)
 
+    serialize_rules = ('-password')
 
-class Article(Base):
+
+class Article(Base, SerializerMixin):
     __tablename__ = 'articles'
 
     id_ = Column('id', sqlalchemy.Integer, primary_key=True)
@@ -35,8 +38,10 @@ class Article(Base):
 
     quotes = relationship('QuoteArticle', back_populates='article')
 
+    serialize_rules = ('-quotes')
 
-class Client(Base):
+
+class Client(Base, SerializerMixin):
     __tablename__ = 'clients'
 
     id_ = Column('id', sqlalchemy.Integer, primary_key=True)
@@ -56,8 +61,10 @@ class Client(Base):
 
     quotes = relationship('Quote', back_populates='client')
 
+    serialize_rules = ('-quotes')
 
-class Quote(Base):
+
+class Quote(Base, SerializerMixin):
     __tablename__ = 'quotes'
 
     id_ = Column('id', sqlalchemy.Integer, primary_key=True)
@@ -71,8 +78,10 @@ class Quote(Base):
     articles = relationship('QuoteArticle', back_populates='quote')
     invoices = relationship('Invoice', back_populates='quote')
 
+    serialize_rules = ('-client', '-articles', '-invoices')
 
-class QuoteArticle(Base):
+
+class QuoteArticle(Base, SerializerMixin):
     __tablename__ = 'quote_article'
 
     quote_id = Column(sqlalchemy.Integer,
@@ -84,8 +93,10 @@ class QuoteArticle(Base):
     article = relationship('Article', back_populates='quotes')
     quote = relationship('Quote', back_populates='articles')
 
+    serialize_rules = ('-articles', '-quote')
 
-class Invoice(Base):
+
+class Invoice(Base, SerializerMixin):
     __tablename__ = 'invoices'
 
     id_ = Column('id', sqlalchemy.Integer, primary_key=True)
@@ -95,6 +106,8 @@ class Invoice(Base):
     balance = Column(sqlalchemy.Numeric)
 
     quote = relationship('Quote', back_populates='invoices')
+
+    serialize_rules = ('-quote')
 
 
 @sql_session(remote=config('REMOTE_SESSION', cast=bool))
