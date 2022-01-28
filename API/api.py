@@ -42,12 +42,24 @@ def test():
 
 
 @jwt_required
-@app.route('/users', methods=['GET'])
+@app.route('/users', methods=['GET', 'POST'])
 def users():
     if request.method == 'GET':
         data = [elem.to_dict() for elem in crud.read(classes.User)]
         msg = '' if data else 'No entries'
         return jsonify(result=data, msg=msg), HTTPStatus.OK
+    elif request.method == 'POST':
+        data = request.get_json(force=True)
+        status = HTTPStatus.BAD_REQUEST
+        msg = 'Error with data'
+        if data:
+            username = data.get('username')
+            password = data.get('password')
+            crud.create(classes.User(
+                username=username, password=func.compute_hash(password)))
+            status = HTTPStatus.OK
+            msg = ''
+        return jsonify(msg=msg), status
 
 
 @jwt_required
