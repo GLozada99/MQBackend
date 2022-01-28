@@ -1,4 +1,5 @@
 import Functions.crud as crud
+import DB.classes as classes
 import Functions.functions as func
 from http import HTTPStatus
 from flask import Flask, request, jsonify
@@ -38,6 +39,107 @@ def login():
 def test():
     username = get_jwt_identity()
     return jsonify(msg=username)
+
+
+@jwt_required
+@app.route('/users', methods=['GET'])
+def users():
+    if request.method == 'GET':
+        data = [elem.to_dict() for elem in crud.read(classes.User)]
+        msg = '' if data else 'No entries'
+        return jsonify(result=data, msg=msg), HTTPStatus.OK
+
+
+@jwt_required
+@app.route('/articles', methods=['GET'])
+def articles():
+    data = [elem.to_dict() for elem in crud.read(classes.Article)]
+    msg = '' if data else 'No entries'
+    return jsonify(result=data, msg=msg), HTTPStatus.OK
+
+
+@jwt_required
+@app.route('/clients', methods=['GET'])
+def clients():
+    data = [elem.to_dict() for elem in crud.read(classes.Client)]
+    msg = '' if data else 'No entries'
+    return jsonify(result=data, msg=msg), HTTPStatus.OK
+
+
+@jwt_required
+@app.route('/quotes', methods=['GET'])
+def quotes():
+    data = [elem.to_dict() for elem in crud.read(classes.Quote)]
+    msg = '' if data else 'No entries'
+    return jsonify(result=data, msg=msg), HTTPStatus.OK
+
+
+@jwt_required
+@app.route('/invoices', methods=['GET'])
+def invoices():
+    data = [elem.to_dict() for elem in crud.read(classes.Invoice)]
+    msg = '' if data else 'No entries'
+    return jsonify(result=data, msg=msg), HTTPStatus.OK
+
+
+@jwt_required
+@app.route('/users/<int:id_>', methods=['GET'])
+def user_by_id(id_):
+    data = crud.read(classes.Users, int(id_))
+    status = HTTPStatus.NOT_FOUND
+    if data:
+        data = data.to_dict()
+        msg = '' if data else 'No entry'
+        status = HTTPStatus.OK
+    return jsonify(result=data, msg=msg), status
+
+
+@jwt_required
+@app.route('/articles/<int:id_>', methods=['GET'])
+def article_by_id(id_):
+    data = crud.read(classes.Users, int(id_))
+    status = HTTPStatus.NOT_FOUND
+    if data:
+        data = data.to_dict()
+        msg = '' if data else 'No entry'
+        status = HTTPStatus.OK
+    return jsonify(result=data, msg=msg), status
+
+
+@jwt_required
+@app.route('/clients/<id>', methods=['GET'])
+def client_by_id(id_):
+    data = crud.read(classes.Users, int(id_))
+    status = HTTPStatus.NOT_FOUND
+    if data:
+        data = data.to_dict()
+        msg = '' if data else 'No entry'
+        status = HTTPStatus.OK
+    return jsonify(result=data, msg=msg), status
+
+
+@jwt_required
+@app.route('/quotes/<id>', methods=['GET'])
+def quote_by_id(id_):
+    data = crud.read(classes.Users, int(id_))
+    status = HTTPStatus.NOT_FOUND
+    if data:
+        data = data.to_dict()
+        msg = '' if data else 'No entry'
+        status = HTTPStatus.OK
+    return jsonify(result=data, msg=msg), status
+
+
+@jwt_required
+@app.route('/invoices/<id>', methods=['GET'])
+def invoice_by_id(id_):
+    data = crud.read(classes.Users, int(id_))
+    status = HTTPStatus.NOT_FOUND
+    if data:
+        data = data.to_dict()
+        msg = '' if data else 'No entry'
+        status = HTTPStatus.OK
+    return jsonify(result=data, msg=msg), status
 
 
 if __name__ == '__main__':
