@@ -2,7 +2,8 @@ import sqlalchemy
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from DB.sql_session import remote_sql_session
+from DB.sql_session import sql_session
+from decouple import config
 import Functions.crud as crud
 from Functions.functions import compute_hash
 
@@ -96,7 +97,7 @@ class Invoice(Base):
     quote = relationship('Quote', back_populates='invoices')
 
 
-@remote_sql_session
+@sql_session(remote=config('REMOTE_SESSION', cast=bool))
 def main(session):
     engine = session.get_bind()
     Base.metadata.drop_all(engine)
