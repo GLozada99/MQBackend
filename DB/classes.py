@@ -78,7 +78,7 @@ class Quote(Base, SerializerMixin):
     articles = relationship('QuoteArticle', back_populates='quote')
     invoices = relationship('Invoice', back_populates='quote')
 
-    serialize_rules = ('-client', '-articles', '-invoices')
+    serialize_rules = ('-articles', '-invoices')
 
 
 class QuoteArticle(Base, SerializerMixin):
